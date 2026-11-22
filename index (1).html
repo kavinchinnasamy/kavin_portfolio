@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kavin C | Aspiring Electro-Technical Officer</title>
+<meta name="description" content="Final-year B.E. Electrical and Electronics Engineering student working towards a career as an Electro-Technical Officer in the Merchant Navy.">
+<script>document.documentElement.className += " js";</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Concept: a ship's bridge at night. Hull-marking condensed type, a radar sweep around
+   the portrait, a live switchboard to play with, and motion that always means something. */
+:root {
+  --bg: #05131D;
+  --bg2: #082030;
+  --ink: #E6F0F2;
+  --muted: #8AA3B0;
+  --line: #17394C;
+  --dead: #22465A;
+  --accent: #FF6B2C;
+  --accent-ink: #1A0B03;
+  --glow: #4FE3D0;
+  --grid: rgba(79, 227, 208, 0.07);
+  --display: "Big Shoulders Display", "Oswald", "Bebas Neue", "Arial Narrow", "Liberation Sans Narrow", sans-serif-condensed, Impact, sans-serif;
+  --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #EDF3F5;
+  --bg2: #FFFFFF;
+  --ink: #07202D;
+  --muted: #476272;
+  --line: #CBDAE1;
+  --dead: #A9BFCB;
+  --accent: #D9480F;
+  --accent-ink: #FFFFFF;
+  --glow: #0B8E8A;
+  --grid: rgba(11, 142, 138, 0.09);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+p { margin: 0; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--accent); color: var(--accent-ink); }
+
+.wrap { width: 100%; max-width: 1140px; margin-inline: auto; padding-inline: max(18px, env(safe-area-inset-left, 0px)) max(18px, env(safe-area-inset-right, 0px)); }
+section { position: relative; padding-block: 6rem; }
+.label { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--glow); margin: 0 0 1rem; display: flex; align-items: center; gap: 0.7rem; }
+.label::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+h1, h2, h3 { font-family: var(--display); margin: 0; text-transform: uppercase; line-height: 0.95; letter-spacing: 0.005em; text-wrap: balance; }
+h2 { font-size: clamp(2.6rem, 6.5vw, 5rem); font-weight: 800; margin-bottom: 2.5rem; }
+h3 { font-size: 1.7rem; font-weight: 800; line-height: 1; }
+
+/* progress + glow */
+.progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; transform-origin: 0 50%; transform: scaleX(0); background: linear-gradient(90deg, var(--glow), var(--accent)); z-index: 60; }
+.glow { position: fixed; top: 0; left: 0; width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%; pointer-events: none; z-index: 1; background: radial-gradient(closest-side, color-mix(in srgb, var(--glow) 16%, transparent), transparent); opacity: 0; transition: opacity 0.4s; will-change: transform; }
+.glow.on { opacity: 1; }
+@media (hover: none) { .glow { display: none; } }
+
+/* header */
+.bar { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: background 0.3s, border-color 0.3s; border-bottom: 1px solid transparent; }
+.bar.solid { background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(12px); border-color: var(--line); }
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; height: 62px; gap: 1rem; }
+.brand { display: flex; align-items: center; gap: 0.65rem; text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 1.4rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.brand i { font-style: normal; width: 32px; height: 32px; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); font-size: 1rem; clip-path: polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%); }
+nav { display: flex; align-items: center; gap: 1.5rem; }
+.links { display: flex; gap: 1.5rem; }
+.links a { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: var(--muted); position: relative; padding-block: 0.3rem; }
+.links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+.links a:hover, .links a.act { color: var(--ink); }
+.links a:hover::after, .links a.act::after { transform: scaleX(1); }
+.theme { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; background: transparent; color: var(--ink); border: 1px solid var(--line); padding: 0.45rem 0.8rem; cursor: pointer; }
+.theme:hover { border-color: var(--accent); color: var(--accent); }
+
+/* hero */
+.hero { padding: calc(62px + 3rem) 0 0; overflow: hidden; isolation: isolate; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(ellipse 80% 70% at 65% 45%, #000 20%, transparent 75%); mask-image: radial-gradient(ellipse 80% 70% at 65% 45%, #000 20%, transparent 75%); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); gap: 2rem; align-items: center; padding-bottom: 7rem; }
+.tele { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: grid; gap: 0.35rem; margin-bottom: 1.6rem; }
+.tele .status { color: var(--glow); display: flex; align-items: center; gap: 0.6rem; }
+.pulse { width: 9px; height: 9px; border-radius: 50%; background: var(--glow); box-shadow: 0 0 0 0 var(--glow); animation: ping 2s infinite; flex: none; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--glow) 70%, transparent); } 80%, 100% { box-shadow: 0 0 0 12px transparent; } }
+.big { font-size: clamp(3.2rem, 9vw, 7rem); font-weight: 900; line-height: 0.9; }
+.big .line { display: block; clip-path: inset(0 -100vw 0 -100vw); padding-bottom: 0.06em; }
+.big .line > span { display: block; animation: rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.big .line:nth-child(2) > span { animation-delay: 0.12s; }
+.big .line:nth-child(3) > span { animation-delay: 0.24s; }
+.big .hot { color: var(--accent); }
+@keyframes rise { from { transform: translateY(105%); } to { transform: none; } }
+.typed-row { margin-top: 1.8rem; font-family: var(--mono); font-size: 0.95rem; color: var(--muted); min-height: 1.6em; }
+.typed-row b { color: var(--ink); font-weight: 500; }
+.caret { display: inline-block; width: 9px; height: 1.05em; background: var(--accent); vertical-align: -0.15em; margin-left: 3px; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.lede { margin-top: 1.2rem; max-width: 33rem; color: var(--muted); font-size: 1.08rem; }
+.cta { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 2.2rem; }
+.btn { display: inline-flex; align-items: center; gap: 0.7rem; text-decoration: none; font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; padding: 1rem 1.5rem; border: 1px solid var(--ink); transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.2s; will-change: transform; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn.ghost:hover { background: var(--ink); color: var(--bg); }
+.btn svg { width: 14px; height: 14px; transition: transform 0.25s; }
+.btn:hover svg { transform: translateX(4px); }
+
+.radar { position: relative; width: 100%; max-width: 520px; aspect-ratio: 1; margin-inline: auto; }
+.radar canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.porthole { position: absolute; inset: 29%; border-radius: 50%; overflow: hidden; background: var(--bg2); box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px var(--accent), 0 0 60px color-mix(in srgb, var(--glow) 25%, transparent); }
+.porthole img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 16%; }
+.porthole .mark { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-weight: 900; font-size: 4rem; color: var(--glow); }
+.spin { position: absolute; inset: 25%; border-radius: 50%; border: 1px dashed color-mix(in srgb, var(--glow) 55%, transparent); animation: spin 50s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.blip { position: absolute; width: 0; height: 0; --lit: 0.2; }
+.blip i { position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); opacity: calc(0.35 + var(--lit) * 0.65); transform: scale(calc(1 + var(--lit) * 0.7)); box-shadow: 0 0 calc(var(--lit) * 18px) var(--accent); }
+.blip span { position: absolute; left: 0; top: 12px; transform: translateX(-50%); white-space: nowrap; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); opacity: calc(0.4 + var(--lit) * 0.6); }
+.readout { position: absolute; left: 0; bottom: 0; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.readout b { color: var(--glow); font-weight: 500; }
+
+.waves { position: absolute; left: 0; right: 0; bottom: -1px; height: 96px; pointer-events: none; }
+.waves svg { position: absolute; bottom: 0; left: 0; width: 200%; height: 100%; }
+.waves .w1 { animation: drift 30s linear infinite; }
+.waves .w2 { animation: drift 19s linear infinite; }
+@keyframes drift { to { transform: translateX(-50%); } }
+
+/* marquee */
+.marquee { background: var(--bg2); border-block: 1px solid var(--line); overflow: hidden; padding-block: 1.1rem; }
+.marquee .track { display: flex; width: max-content; animation: slide 46s linear infinite; }
+.marquee:hover .track { animation-play-state: paused; }
+.marquee span { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(1.4rem, 3vw, 2.1rem); letter-spacing: 0.04em; color: var(--muted); white-space: nowrap; padding-right: 2.5rem; }
+.marquee span::after { content: "/"; color: var(--accent); padding-left: 2.5rem; }
+@keyframes slide { to { transform: translateX(-50%); } }
+
+/* stats */
+.stats { padding-block: 0; border-bottom: 1px solid var(--line); }
+.stats .wrap { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.stat { padding: 2rem 1.2rem; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat strong { display: block; font-family: var(--display); font-weight: 900; font-size: clamp(2.2rem, 4.2vw, 3.4rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.stat span { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+/* goal */
+.goal-text { font-size: clamp(1.7rem, 3.8vw, 3rem); font-weight: 600; line-height: 1.22; letter-spacing: -0.01em; max-width: 26ch; max-width: 22em; }
+.goal-text .w { opacity: 0.2; transition: opacity 0.25s; }
+.goal-text .w.lit { opacity: 1; }
+.goal-sub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; margin-top: 3rem; color: var(--muted); max-width: 52rem; }
+
+/* simulator */
+.sim-sec { background: var(--bg2); border-block: 1px solid var(--line); }
+.sim-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; }
+.sim-head p { max-width: 26rem; color: var(--muted); margin-bottom: 2.5rem; }
+.sim-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
+.sim-box { border: 1px solid var(--line); background: var(--bg); padding: 0.5rem; }
+.sim-box svg { width: 100%; height: auto; display: block; user-select: none; }
+.ln { stroke: var(--dead); stroke-width: 2; fill: none; transition: stroke 0.3s; }
+.bus { stroke: var(--dead); stroke-width: 6; stroke-linecap: round; fill: none; transition: stroke 0.3s; }
+.brk { fill: var(--bg); stroke: var(--dead); stroke-width: 2; transition: stroke 0.3s; }
+.node { fill: var(--bg2); stroke: var(--dead); stroke-width: 2; transition: stroke 0.3s, fill 0.3s; }
+.sym { font-family: var(--display); font-weight: 900; font-size: 20px; fill: var(--dead); transition: fill 0.3s; }
+.t { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; fill: var(--muted); }
+.st { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; fill: var(--dead); font-weight: 500; }
+.on .ln, .on.ln, .ln.on { stroke: var(--glow); }
+.on .brk { stroke: var(--glow); }
+.on .node { stroke: var(--glow); fill: color-mix(in srgb, var(--glow) 16%, var(--bg2)); }
+.on .sym { fill: var(--glow); }
+.on .st { fill: var(--glow); }
+.bus.on { stroke: var(--accent); filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 70%, transparent)); }
+.on .flow, .flow.on { stroke-dasharray: 5 7; animation: flow 0.9s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -24; } }
+.gen { cursor: pointer; }
+.gen:hover .node { stroke: var(--accent); }
+.gen:focus-visible { outline: none; }
+.gen:focus-visible .node { stroke: var(--accent); stroke-width: 4; }
+.panel { border: 1px solid var(--line); background: var(--bg); padding: 1.4rem; display: grid; gap: 1.2rem; }
+.pill { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.8rem 1rem; border-left: 4px solid var(--glow); background: color-mix(in srgb, var(--glow) 10%, var(--bg)); line-height: 1.5; }
+.pill.warn { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--bg)); color: var(--ink); }
+.loads { list-style: none; margin: 0; padding: 0; }
+.loads li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.65rem 0; border-bottom: 1px solid var(--line); font-size: 0.92rem; }
+.loads b { font-family: var(--mono); font-weight: 500; font-size: 0.72rem; letter-spacing: 0.1em; color: var(--dead); }
+.loads li.up b { color: var(--glow); }
+.sim-note { font-size: 0.8rem; color: var(--muted); }
+.reset { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; border: 1px solid var(--line); color: var(--ink); padding: 0.7rem 1rem; cursor: pointer; justify-self: start; }
+.reset:hover { border-color: var(--accent); color: var(--accent); }
+
+/* projects */
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; }
+.card { position: relative; border: 1px solid var(--line); background: var(--bg2); display: flex; flex-direction: column; overflow: hidden; transition: border-color 0.3s, transform 0.3s; --mx: 50%; --my: 0%; }
+.card::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.3s; background: radial-gradient(320px circle at var(--mx) var(--my), color-mix(in srgb, var(--glow) 16%, transparent), transparent 70%); }
+.card:hover { border-color: var(--glow); transform: translateY(-4px); }
+.card:hover::before { opacity: 1; }
+.viz { height: 130px; border-bottom: 1px solid var(--line); background: var(--bg); position: relative; overflow: hidden; }
+.viz svg { width: 100%; height: 100%; display: block; }
+.viz small { position: absolute; left: 0.9rem; bottom: 0.55rem; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.card-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 0.9rem; flex: 1; position: relative; }
+.yr { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.12em; color: var(--accent); }
+.card ul { margin: 0; padding-left: 1.1rem; color: var(--muted); font-size: 0.92rem; display: grid; gap: 0.5rem; }
+.card li::marker { color: var(--accent); }
+.rel { font-size: 0.86rem; padding: 0.8rem 1rem; border-left: 3px solid var(--glow); background: color-mix(in srgb, var(--glow) 9%, var(--bg2)); }
+.rel b { display: block; font-family: var(--mono); font-weight: 500; font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--glow); }
+.chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.chip { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.04em; padding: 0.28rem 0.65rem; border: 1px solid var(--line); color: var(--muted); transition: color 0.2s, border-color 0.2s, transform 0.2s; }
+.chip:hover { color: var(--ink); border-color: var(--glow); transform: translateY(-2px); }
+.more { margin-top: auto; padding-top: 0.5rem; display: inline-flex; align-items: center; gap: 0.6rem; font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+.more svg { width: 14px; height: 14px; transition: transform 0.25s; }
+.more:hover svg { transform: translate(3px, -3px); }
+
+/* timeline */
+.tl { position: relative; padding-left: 2.6rem; max-width: 52rem; }
+.tl::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: var(--line); }
+.tl-fill { position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--glow), var(--accent)); transform-origin: top; transform: scaleY(0); }
+.tl-item { position: relative; padding-bottom: 3.2rem; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item::before { content: ""; position: absolute; left: -2.6rem; top: 0.45rem; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+.tl-item .yr { display: block; margin-bottom: 0.4rem; }
+.tl-item .sub { color: var(--muted); margin: 0.4rem 0 1rem; }
+.tl-item ul { margin: 0 0 1rem; padding-left: 1.1rem; color: var(--muted); display: grid; gap: 0.5rem; }
+.tl-item li::marker { color: var(--accent); }
+
+/* skills */
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.6rem 3.5rem; }
+.skills h3 { font-size: 1.15rem; font-family: var(--mono); font-weight: 500; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1rem; }
+.skills .chip { font-size: 0.8rem; color: var(--ink); background: var(--bg2); padding: 0.45rem 0.8rem; }
+
+/* credentials */
+.cred { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 4rem; }
+.award { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1.4rem; align-items: center; border: 1px solid var(--line); background: var(--bg2); padding: 1.6rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+.award-ring-unused { content: ""; position: absolute; right: -40px; top: -40px; width: 140px; height: 140px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); box-shadow: 0 0 0 18px transparent, 0 0 0 19px color-mix(in srgb, var(--accent) 25%, transparent); }
+.award .big2 { font-family: var(--display); font-weight: 900; font-size: 4.4rem; line-height: 0.85; color: var(--accent); }
+.award p { color: var(--muted); font-size: 0.92rem; margin-top: 0.5rem; }
+.rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.rows li { border-bottom: 1px solid var(--line); }
+.rows a, .rows .plain { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 1rem 0; text-decoration: none; transition: padding 0.25s, color 0.25s; }
+.rows a:hover { padding-left: 0.8rem; color: var(--accent); }
+.rows .meta { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); white-space: nowrap; }
+.rows .plain b { display: block; font-weight: 600; }
+.rows .plain span.sm { color: var(--muted); font-size: 0.9rem; }
+
+/* contact */
+.cred h2 { font-size: clamp(2.4rem, 5vw, 4rem); }
+.contact { background: var(--ink); color: var(--bg); overflow: hidden; }
+.contact .label { color: var(--accent); }
+.contact h2 { font-size: clamp(3rem, 9vw, 7.5rem); font-weight: 900; margin-bottom: 1.5rem; line-height: 0.88; }
+.contact-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 3rem; align-items: start; }
+.contact .lead { max-width: 28rem; color: color-mix(in srgb, var(--bg) 70%, transparent); margin-bottom: 2rem; }
+.contact .btn { border-color: var(--bg); color: var(--bg); }
+.contact .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.contact .btn:hover { background: var(--bg); color: var(--ink); border-color: var(--bg); }
+.reach { font-family: var(--mono); font-size: 0.88rem; margin-bottom: 1.6rem; }
+.reach div { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 0.8rem 0; border-bottom: 1px solid color-mix(in srgb, var(--bg) 22%, transparent); }
+.reach span { color: color-mix(in srgb, var(--bg) 55%, transparent); }
+.reach b { font-weight: 500; overflow-wrap: anywhere; user-select: all; }
+.soc { list-style: none; margin: 0; padding: 0; }
+.soc li { border-bottom: 1px solid color-mix(in srgb, var(--bg) 22%, transparent); }
+.soc a { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.05rem 0; text-decoration: none; font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 1.7rem; letter-spacing: 0.02em; transition: padding 0.25s, color 0.25s; }
+.soc a small { font-family: var(--mono); font-weight: 400; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: none; color: color-mix(in srgb, var(--bg) 55%, transparent); overflow-wrap: anywhere; text-align: right; }
+.soc a:hover { padding-left: 1rem; color: var(--accent); }
+.contact :focus-visible { outline-color: var(--accent); }
+footer { background: var(--ink); color: color-mix(in srgb, var(--bg) 60%, transparent); border-top: 1px solid color-mix(in srgb, var(--bg) 22%, transparent); padding-block: 1.6rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+footer .wrap { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+footer a { color: inherit; }
+footer a:hover { color: var(--accent); }
+
+/* reveal on scroll */
+.js .rv { opacity: 0; transform: translateY(28px); transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1); transition-delay: var(--d, 0s); }
+.js .rv.in { opacity: 1; transform: none; }
+
+@media (max-width: 960px) {
+  section { padding-block: 4.2rem; }
+  .hero-grid, .cred, .contact-grid, .sim-grid { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+  .radar { max-width: 440px; }
+  .cards { grid-template-columns: minmax(0, 1fr); }
+  .links { display: none; }
+  .stats .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+  .stat:nth-child(-n+2) { border-top: 0; }
+  .skills, .goal-sub { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .hero-grid { padding-bottom: 5rem; }
+  .soc a { font-size: 1.35rem; }
+  .soc a small { font-size: 0.66rem; }
+  .blip span { font-size: 0.56rem; }
+  .award { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js .rv { opacity: 1; transform: none; }
+  .goal-text .w { opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="glow" id="glow" aria-hidden="true"></div>
+
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Kavin C, back to top"><i>KC</i> Kavin C</a>
+    <nav aria-label="Primary">
+      <div class="links">
+        <a href="#goal">Goal</a>
+        <a href="#engine-room">Engine room</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Internships</a>
+        <a href="#skills">Skills</a>
+        <a href="#credentials">Credentials</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="theme" id="theme" type="button" aria-label="Switch between night and day colours">Day</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="tele">
+          <span class="status"><i class="pulse"></i> Open to ETO sponsorship and training</span>
+          <span><time class="clock">--:--:--</time> IST &nbsp;·&nbsp; Erode, Tamil Nadu &nbsp;·&nbsp; 11.34°N 77.72°E</span>
+        </div>
+        <h1 class="big" aria-label="Electrical engineering, heading to sea.">
+          <span class="line"><span>Electrical</span></span>
+          <span class="line"><span>engineering,</span></span>
+          <span class="line"><span class="hot">heading to sea.</span></span>
+        </h1>
+        <p class="typed-row">Training for <b id="typed">marine electrical systems</b><span class="caret" aria-hidden="true"></span></p>
+        <p class="lede">I am Kavin, a final-year B.E. Electrical and Electronics Engineering student. My goal is to become an Electro-Technical Officer in the Merchant Navy, keeping shipboard power, automation and control systems safe, reliable and efficient.</p>
+        <div class="cta">
+          <a class="btn primary mag" href="#contact">Get in touch
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h11M9 3l5 5-5 5"/></svg></a>
+          <a class="btn ghost mag" href="#engine-room">Try the switchboard</a>
+        </div>
+      </div>
+
+      <div class="radar" id="radar">
+        <canvas id="radarCanvas" aria-hidden="true"></canvas>
+        <div class="spin" aria-hidden="true"></div>
+        <div class="porthole">
+          <img id="photo" src="1000213538-200kb.jpg" alt="Portrait of Kavin C" width="720" height="960">
+          <span class="mark" id="monogram" hidden>KC</span>
+        </div>
+        <div class="readout" aria-hidden="true">Sweep bearing <b id="brg">000</b>°</div>
+      </div>
+    </div>
+
+    <div class="waves" aria-hidden="true" id="waves"></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track" id="track">
+      <div style="display:flex"><span>Marine electrical systems</span><span>Shipboard power distribution</span><span>Automation</span><span>Control systems</span><span>Electrical maintenance</span><span>Renewable energy</span><span>Power systems</span></div>
+      <div style="display:flex"><span>Marine electrical systems</span><span>Shipboard power distribution</span><span>Automation</span><span>Control systems</span><span>Electrical maintenance</span><span>Renewable energy</span><span>Power systems</span></div>
+    </div>
+  </div>
+
+  <section class="stats">
+    <div class="wrap">
+      <div class="stat rv"><strong>May 2027</strong><span>Graduation</span></div>
+      <div class="stat rv" style="--d:.08s"><strong data-count="7.459" data-dec="3">7.459</strong><span>CGPA</span></div>
+      <div class="stat rv" style="--d:.16s"><strong data-count="2" data-dec="0">2</strong><span>Industrial internships</span></div>
+      <div class="stat rv" style="--d:.24s"><strong data-count="3" data-dec="0">3</strong><span>Hardware projects</span></div>
+      <div class="stat rv" style="--d:.32s"><strong>2nd prize</strong><span>Paper presentation</span></div>
+    </div>
+  </section>
+
+  <section id="goal">
+    <div class="wrap">
+      <p class="label rv">Career goal</p>
+      <p class="goal-text" id="goalText">My goal is to turn my passion for electrical engineering into a career at sea, contributing to safe, reliable and efficient shipboard electrical operations.</p>
+      <div class="goal-sub">
+        <p class="rv">I am particularly interested in marine electrical systems, shipboard power distribution, automation, control systems and electrical maintenance. I am exploring ETO sponsorship and training opportunities for the next step, and I am ready to build the technical knowledge, practical skills and professional discipline that work at sea demands.</p>
+        <p class="rv" style="--d:.1s">Alongside marine engineering, I follow renewable energy, power systems and emerging electrical technologies.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sim-sec" id="engine-room">
+    <div class="wrap">
+      <div class="sim-head">
+        <div>
+          <p class="label rv">Engine room</p>
+          <h2 class="rv">Trip a generator.<br>See what stays on.</h2>
+        </div>
+        <p class="rv">A simplified model of ship power distribution. Click or tap a generator to switch it. Take both main generators offline and watch the blackout response.</p>
+      </div>
+      <div class="sim-grid rv">
+        <div class="sim-box">
+          <svg id="sim" viewBox="0 0 800 400" role="group" aria-label="Interactive single-line diagram of ship power distribution">
+            <path class="bus" id="busMain" d="M60 190H470"/>
+            <text class="t" x="60" y="174">MAIN SWBD</text>
+            <path class="ln" id="tie" d="M470 190H540" stroke-dasharray="4 4"/>
+            <text class="t" x="505" y="174" text-anchor="middle">TIE</text>
+            <path class="bus" id="busEs" d="M540 190H760"/>
+            <text class="t" x="760" y="174" text-anchor="end">EMERGENCY SWBD</text>
+
+            <g class="gen" id="g1" role="switch" tabindex="0" aria-checked="false" aria-label="Main generator 1">
+              <path class="ln flow" d="M170 82V190"/>
+              <rect class="brk" x="164" y="124" width="12" height="12"/>
+              <circle class="node" cx="170" cy="60" r="22"/><text class="sym" x="170" y="67" text-anchor="middle">G</text>
+              <text class="t" x="170" y="22" text-anchor="middle">GEN 1</text>
+              <text class="st" x="200" y="64" id="s-g1">OFF</text>
+              <circle cx="170" cy="60" r="36" fill="transparent"/>
+            </g>
+            <g class="gen" id="g2" role="switch" tabindex="0" aria-checked="false" aria-label="Main generator 2">
+              <path class="ln flow" d="M340 82V190"/>
+              <rect class="brk" x="334" y="124" width="12" height="12"/>
+              <circle class="node" cx="340" cy="60" r="22"/><text class="sym" x="340" y="67" text-anchor="middle">G</text>
+              <text class="t" x="340" y="22" text-anchor="middle">GEN 2</text>
+              <text class="st" x="370" y="64" id="s-g2">OFF</text>
+              <circle cx="340" cy="60" r="36" fill="transparent"/>
+            </g>
+            <g class="gen" id="em" role="switch" tabindex="0" aria-checked="false" aria-label="Emergency generator">
+              <path class="ln flow" d="M650 82V190"/>
+              <rect class="brk" x="644" y="124" width="12" height="12"/>
+              <circle class="node" cx="650" cy="60" r="22"/><text class="sym" x="650" y="67" text-anchor="middle">G</text>
+              <text class="t" x="650" y="22" text-anchor="middle">EMERG. GEN</text>
+              <text class="st" x="680" y="64" id="s-em">STBY</text>
+              <circle cx="650" cy="60" r="36" fill="transparent"/>
+            </g>
+
+            <g class="fd" id="f-prop">
+              <path class="ln" d="M120 190V215"/><rect class="brk" x="114" y="215" width="12" height="12"/><path class="ln flow" d="M120 227V262"/>
+              <circle class="node" cx="120" cy="284" r="22"/><text class="sym" x="120" y="291" text-anchor="middle">M</text>
+              <text class="t" x="120" y="334" text-anchor="middle">PROPULSION</text>
+            </g>
+            <g class="fd" id="f-pump">
+              <path class="ln" d="M265 190V215"/><rect class="brk" x="259" y="215" width="12" height="12"/><path class="ln flow" d="M265 227V262"/>
+              <circle class="node" cx="265" cy="284" r="22"/><text class="sym" x="265" y="291" text-anchor="middle">M</text>
+              <text class="t" x="265" y="334" text-anchor="middle">PUMPS, FANS</text>
+            </g>
+            <g class="fd" id="f-acc">
+              <path class="ln" d="M410 190V215"/><rect class="brk" x="404" y="215" width="12" height="12"/><path class="ln flow" d="M410 227V262"/>
+              <circle class="node" cx="410" cy="284" r="22"/><path class="ln" d="M401 275L419 293M419 275L401 293"/>
+              <text class="t" x="410" y="334" text-anchor="middle">ACCOMMODATION</text>
+            </g>
+            <g class="fd" id="f-steer">
+              <path class="ln" d="M600 190V215"/><rect class="brk" x="594" y="215" width="12" height="12"/><path class="ln flow" d="M600 227V262"/>
+              <circle class="node" cx="600" cy="284" r="22"/><text class="sym" x="600" y="291" text-anchor="middle">M</text>
+              <text class="t" x="600" y="334" text-anchor="middle">STEERING GEAR</text>
+            </g>
+            <g class="fd" id="f-light">
+              <path class="ln" d="M720 190V215"/><rect class="brk" x="714" y="215" width="12" height="12"/><path class="ln flow" d="M720 227V262"/>
+              <circle class="node" cx="720" cy="284" r="22"/><path class="ln" d="M711 275L729 293M729 275L711 293"/>
+              <text class="t" x="720" y="334" text-anchor="middle">EMERG. LIGHTS</text>
+            </g>
+            <text class="t" x="400" y="384" text-anchor="middle" style="letter-spacing:.14em">SIMPLIFIED SINGLE-LINE DIAGRAM</text>
+          </svg>
+        </div>
+        <div class="panel">
+          <div class="pill" id="busStatus" role="status" aria-live="polite">Main bus live</div>
+          <ul class="loads" id="loads"></ul>
+          <button class="reset" id="simReset" type="button">Reset</button>
+          <p class="sim-note">Teaching model only. Real vessels add protection relays, load shedding, interlocks and more.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <p class="label rv">Projects</p>
+      <h2 class="rv">Things I have built.</h2>
+      <div class="cards">
+
+        <article class="card rv">
+          <div class="viz" id="viz-motor"><small>Vibration signal · illustrative</small></div>
+          <div class="card-body">
+            <span class="yr">2026</span>
+            <h3>Smart Motor Health Monitoring and Predictive Maintenance System</h3>
+            <ul>
+              <li>Developed an IoT-based system to monitor motor condition and support predictive maintenance, aiming to detect issues early and reduce unplanned downtime.</li>
+              <li>Applied electrical machine fundamentals, sensing and hardware integration, with remote monitoring through Blynk IoT.</li>
+            </ul>
+            <div class="rel"><b>Why it matters at sea</b>Condition monitoring of motors and pumps is routine on ships, where unplanned downtime has real consequences.</div>
+            <div class="chips"><span class="chip">Blynk IoT</span><span class="chip">Arduino</span><span class="chip">Sensing</span></div>
+            <a class="more" href="https://drive.google.com/drive/folders/1ucB47jCwqgToDdbsuUd0G6WPIqOjmh4Z" target="_blank" rel="noopener">View project files <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12L12 4M5 4h7v7"/></svg></a>
+          </div>
+        </article>
+
+        <article class="card rv" style="--d:.1s">
+          <div class="viz" id="viz-pwm"><small>PWM switching · illustrative</small></div>
+          <div class="card-body">
+            <span class="yr">2025</span>
+            <h3>Design of 12V DC Converter Using Power MOSFET</h3>
+            <ul>
+              <li>Designed and built a 12V DC converter prototype using Power MOSFETs for efficient voltage conversion and power delivery.</li>
+              <li>Selected suitable components, optimized the switching mechanism to reduce power losses, and tested the prototype under varying load conditions for consistent operation.</li>
+            </ul>
+            <div class="chips"><span class="chip">Power MOSFET</span><span class="chip">KiCad</span><span class="chip">MATLAB</span></div>
+            <a class="more" href="https://lnkd.in/p/gJKFTnDi" target="_blank" rel="noopener">View project post <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12L12 4M5 4h7v7"/></svg></a>
+          </div>
+        </article>
+
+        <article class="card rv" style="--d:.2s">
+          <div class="viz" id="viz-voice"><small>Local voice command · no cloud</small></div>
+          <div class="card-body">
+            <span class="yr">2024</span>
+            <h3>Voice-Controlled Home Automation Without Internet</h3>
+            <ul>
+              <li>Designed a hardware-based system for voice-controlled operation of household appliances using offline voice recognition, with no cloud dependency.</li>
+              <li>Integrated a microcontroller with relay modules to switch appliances through local voice commands, focusing on privacy, reliability and low-latency control.</li>
+            </ul>
+            <div class="chips"><span class="chip">Microcontroller</span><span class="chip">Relay modules</span><span class="chip">Offline voice</span></div>
+            <a class="more" href="https://lnkd.in/p/gEai2WDH" target="_blank" rel="noopener">View project post <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12L12 4M5 4h7v7"/></svg></a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" style="background:var(--bg2);border-block:1px solid var(--line)">
+    <div class="wrap">
+      <p class="label rv">Industrial internships</p>
+      <h2 class="rv">Time on the shop floor.</h2>
+      <div class="tl" id="tl">
+        <div class="tl-fill" id="tlFill"></div>
+        <article class="tl-item rv">
+          <span class="yr">2026</span>
+          <h3>Industrial Intern</h3>
+          <p class="sub">Southern Railway Signal &amp; Telecommunication Workshop</p>
+          <ul>
+            <li>Gained practical exposure to railway signalling systems, telecommunication equipment and standard maintenance procedures.</li>
+            <li>Observed the operation, inspection and maintenance of signalling and communication systems used in railway operations.</li>
+            <li>Learned maintenance practices that support the reliability and safety of railway operations, and followed industrial safety protocols.</li>
+          </ul>
+          <a class="more" href="https://lnkd.in/p/giJtnKGr" target="_blank" rel="noopener">View internship post <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12L12 4M5 4h7v7"/></svg></a>
+        </article>
+        <article class="tl-item rv">
+          <span class="yr">2025</span>
+          <h3>Intern</h3>
+          <p class="sub">Hydraline Industries II (a unit of C.R.I. Pumps Pvt. Ltd.)</p>
+          <ul>
+            <li>Gained hands-on exposure to pump manufacturing, assembly, quality inspection and industrial safety practices.</li>
+            <li>Assisted in production processes while learning manufacturing workflows and quality standards.</li>
+            <li>Observed testing procedures and learned preventive maintenance techniques for industrial pumps.</li>
+          </ul>
+          <a class="more" href="https://lnkd.in/p/ggJjtwTr" target="_blank" rel="noopener">View internship post <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12L12 4M5 4h7v7"/></svg></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <p class="label rv">Skills</p>
+      <h2 class="rv">What I work with.</h2>
+      <div class="skills">
+        <div class="rv">
+          <h3>Core electrical engineering</h3>
+          <div class="chips"><span class="chip">Power System Analysis</span><span class="chip">Electrical Machines (AC &amp; DC)</span><span class="chip">Electrical Machine Design</span><span class="chip">Circuit Analysis</span><span class="chip">Power Electronics</span><span class="chip">Control Systems</span><span class="chip">High Voltage Engineering</span></div>
+        </div>
+        <div class="rv" style="--d:.1s">
+          <h3>Practical skills</h3>
+          <div class="chips"><span class="chip">Electrical troubleshooting (basic)</span><span class="chip">Basic electrical maintenance</span><span class="chip">Household wiring</span><span class="chip">Electrical safety practices</span><span class="chip">Fault identification (basic)</span></div>
+        </div>
+        <div class="rv">
+          <h3>Tools</h3>
+          <div class="chips"><span class="chip">MATLAB</span><span class="chip">Arduino IDE</span><span class="chip">KiCad</span><span class="chip">Blynk IoT</span></div>
+        </div>
+        <div class="rv" style="--d:.1s">
+          <h3>Programming and languages</h3>
+          <div class="chips"><span class="chip">Python</span><span class="chip">C (basic)</span><span class="chip">Tamil</span><span class="chip">English</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="credentials" style="background:var(--bg2);border-block:1px solid var(--line)">
+    <div class="wrap cred">
+      <div>
+        <p class="label rv">Achievement and certifications</p>
+        <h2 class="rv">Recognition.</h2>
+        <div class="award rv">
+          <div class="big2">2nd</div>
+          <div>
+            <h3>Paper presentation prize</h3>
+            <p>&ldquo;GaN and SiC Power Devices for High-Efficiency Converters&rdquo; at E&sup2; Vision-2K25, Rover Engineering College, Perambalur, 2025.</p>
+            <a class="more" href="https://lnkd.in/p/gnWAvUBn" target="_blank" rel="noopener">View post <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12L12 4M5 4h7v7"/></svg></a>
+          </div>
+        </div>
+        <ul class="rows rv">
+          <li><a href="https://lnkd.in/p/gh2YdrJ9" target="_blank" rel="noopener"><span>Semiconductor and VLSI</span><span class="meta">2026</span></a></li>
+          <li><a href="https://lnkd.in/p/g5nJKH6w" target="_blank" rel="noopener"><span>Indian Engineers Elite Challenge</span><span class="meta">2026</span></a></li>
+          <li><a href="https://lnkd.in/p/g7gDwKxB" target="_blank" rel="noopener"><span>Introduction to Internet of Things (NPTEL)</span><span class="meta">2025</span></a></li>
+          <li><a href="https://lnkd.in/p/gy7HBfJV" target="_blank" rel="noopener"><span>Fundamentals of Operating System (NPTEL)</span><span class="meta">2025</span></a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="label rv">Education</p>
+        <h2 class="rv">Where I study.</h2>
+        <ul class="rows rv">
+          <li><div class="plain"><span><b>B.E. Electrical and Electronics Engineering</b><span class="sm">Erode Sengunthar Engineering College · CGPA 7.459</span></span><span class="meta">2023 – 2027</span></div></li>
+          <li><div class="plain"><span><b>HSC (Class XII)</b><span class="sm">Government Higher Secondary School · 64%</span></span><span class="meta">2023</span></div></li>
+          <li><div class="plain"><span><b>SSLC (Class X)</b><span class="sm">Government Higher Secondary School · 70%</span></span><span class="meta">2021</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <p class="label rv">Contact</p>
+      <h2 class="rv">Sponsoring ETO trainees? Let&rsquo;s talk.</h2>
+      <div class="contact-grid">
+        <div class="rv">
+          <p class="lead">If your company or programme offers Electro-Technical Officer sponsorship or training, I would be glad to hear from you.</p>
+          <div class="reach">
+            <div><span>Email</span><b>kavinchinnasamy18@gmail.com</b></div>
+            <div><span>Phone</span><b>+91 93610 10136</b></div>
+            <div><span>Location</span><b>Erode, Tamil Nadu</b></div>
+          </div>
+          <div class="cta" style="margin-top:0">
+            <a class="btn primary mag" href="mailto:kavinchinnasamy18@gmail.com">Send an email
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h11M9 3l5 5-5 5"/></svg></a>
+            <button class="btn mag" id="copyMail" type="button" style="background:transparent;cursor:pointer">Copy email</button>
+          </div>
+        </div>
+        <ul class="soc rv" style="--d:.1s">
+          <li><a href="https://www.linkedin.com/in/kavinchinnasamy18" target="_blank" rel="noopener">LinkedIn <small>/in/kavinchinnasamy18</small></a></li>
+          <li><a href="https://github.com/kavinchinnasamy" target="_blank" rel="noopener">GitHub <small>@kavinchinnasamy</small></a></li>
+          <li><a href="https://www.instagram.com/ka_win_11" target="_blank" rel="noopener">Instagram <small>@ka_win_11</small></a></li>
+          <li><a href="https://x.com/Kavinc1816" target="_blank" rel="noopener">X <small>@Kavinc1816</small></a></li>
+          <li><a href="https://www.facebook.com/share/1H5rsoZ3d8/" target="_blank" rel="noopener">Facebook <small>Kavin C</small></a></li>
+          <li><a href="https://wa.me/919361010136" target="_blank" rel="noopener">WhatsApp <small>+91 93610 10136</small></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Kavin C · Aspiring Electro-Technical Officer</span>
+    <span>Erode · <time class="clock">--:--:--</time> IST · <a href="#top">Back to top</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+
+  /* theme */
+  var themeBtn = $("#theme");
+  function applyTheme(t) {
+    if (t === "light") root.setAttribute("data-theme", "light"); else root.removeAttribute("data-theme");
+    themeBtn.textContent = t === "light" ? "Night" : "Day";
+    if (radar) { radar.readColors(); radar.drawNow(); }
+  }
+  var saved = null;
+  try { saved = localStorage.getItem("kc-theme"); } catch (e) {}
+  themeBtn.addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+    try { localStorage.setItem("kc-theme", next); } catch (e) {}
+    applyTheme(next);
+  });
+
+  /* header, progress, active link */
+  var bar = $("#bar"), prog = $("#progress");
+  var links = $$(".links a");
+  var tl = $("#tl"), tlFill = $("#tlFill");
+  var goal = $("#goalText"), words = [];
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      var y = window.scrollY, h = root.scrollHeight - window.innerHeight;
+      prog.style.transform = "scaleX(" + (h > 0 ? y / h : 0) + ")";
+      bar.classList.toggle("solid", y > 24);
+      var vh = window.innerHeight;
+      if (tl) {
+        var r = tl.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, (vh * 0.7 - r.top) / r.height));
+        tlFill.style.transform = "scaleY(" + p + ")";
+      }
+      if (words.length) {
+        var g = goal.getBoundingClientRect();
+        var q = Math.min(1, Math.max(0, (vh * 0.85 - g.top) / (g.height + vh * 0.3)));
+        var n = Math.round(q * words.length * 1.15);
+        for (var i = 0; i < words.length; i++) words[i].classList.toggle("lit", i < n);
+      }
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+
+  var secs = links.map(function (a) { return $(a.getAttribute("href")); });
+  if ("IntersectionObserver" in window) {
+    var so = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) {
+          var i = secs.indexOf(e.target);
+          links.forEach(function (a, j) { a.classList.toggle("act", i === j); });
+        }
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    secs.forEach(function (s) { if (s) so.observe(s); });
+  }
+
+  /* goal text: words light up as you scroll */
+  if (goal && !RM) {
+    var txt = goal.textContent.trim().split(/\s+/);
+    goal.textContent = "";
+    txt.forEach(function (w, i) {
+      var s = document.createElement("span"); s.className = "w"; s.textContent = w;
+      goal.appendChild(s); if (i < txt.length - 1) goal.appendChild(document.createTextNode(" "));
+      words.push(s);
+    });
+  }
+
+  /* reveal on scroll */
+  var rvs = $$(".rv");
+  if (RM || !("IntersectionObserver" in window)) {
+    rvs.forEach(function (el) { el.classList.add("in"); });
+  } else {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
+    rvs.forEach(function (el) { io.observe(el); });
+  }
+
+  /* count up */
+  function countUp(el) {
+    var to = parseFloat(el.dataset.count), dec = parseInt(el.dataset.dec || "0", 10), t0 = null, dur = 1500;
+    function step(t) {
+      if (!t0) t0 = t;
+      var p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = (to * e).toFixed(dec);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if (!RM && "IntersectionObserver" in window) {
+    var co = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { countUp(e.target); co.unobserve(e.target); } });
+    }, { threshold: 0.6 });
+    $$("[data-count]").forEach(function (el) { el.textContent = "0"; co.observe(el); });
+  }
+
+  /* typewriter */
+  var typed = $("#typed");
+  var phrases = ["marine electrical systems", "shipboard power distribution", "automation and control", "electrical maintenance", "safe, reliable operations at sea"];
+  if (!RM) {
+    var pi = 0, ci = 0, del = false;
+    (function tick() {
+      var word = phrases[pi];
+      ci += del ? -1 : 1;
+      typed.textContent = word.slice(0, ci);
+      var wait = del ? 28 : 62;
+      if (!del && ci === word.length) { del = true; wait = 1500; }
+      else if (del && ci === 0) { del = false; pi = (pi + 1) % phrases.length; wait = 350; }
+      setTimeout(tick, wait);
+    })();
+  }
+
+  /* clock */
+  var clocks = $$(".clock");
+  function clock() {
+    var t = new Date().toLocaleTimeString("en-GB", { timeZone: "Asia/Kolkata", hour12: false });
+    clocks.forEach(function (c) { c.textContent = t; });
+  }
+  clock(); setInterval(clock, 1000);
+
+  /* cursor glow, card spotlight, magnetic buttons */
+  if (fine && !RM) {
+    var glow = $("#glow");
+    window.addEventListener("pointermove", function (e) {
+      glow.style.transform = "translate3d(" + e.clientX + "px," + e.clientY + "px,0)";
+      glow.classList.add("on");
+    }, { passive: true });
+    $$(".card").forEach(function (c) {
+      c.addEventListener("pointermove", function (e) {
+        var r = c.getBoundingClientRect();
+        c.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        c.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+    });
+    $$(".mag").forEach(function (b) {
+      b.addEventListener("pointermove", function (e) {
+        var r = b.getBoundingClientRect();
+        var x = (e.clientX - r.left - r.width / 2) * 0.18, y = (e.clientY - r.top - r.height / 2) * 0.3;
+        b.style.transform = "translate(" + x + "px," + y + "px)";
+      });
+      b.addEventListener("pointerleave", function () { b.style.transform = ""; });
+    });
+  }
+
+  /* copy email */
+  var copy = $("#copyMail");
+  copy.addEventListener("click", function () {
+    var mail = "kavinchinnasamy18@gmail.com";
+    function done() { copy.textContent = "Copied"; setTimeout(function () { copy.textContent = "Copy email"; }, 1600); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(mail).then(done, function () { copy.textContent = mail; });
+    } else { copy.textContent = mail; }
+  });
+
+  /* photo fallback */
+  var photo = $("#photo"), mark = $("#monogram");
+  function noPhoto() { photo.hidden = true; mark.hidden = false; }
+  photo.addEventListener("error", noPhoto);
+  if (photo.complete && photo.naturalWidth === 0) noPhoto();
+
+  /* waves */
+  (function () {
+    var host = $("#waves");
+    function wave(amp, period, phase, base, fill, cls) {
+      var d = "M0 96";
+      for (var x = 0; x <= 2400; x += 12) {
+        d += "L" + x + " " + (base + amp * Math.sin((x / period) * 6.2832 + phase)).toFixed(1);
+      }
+      d += "L2400 96Z";
+      return '<svg class="' + cls + '" viewBox="0 0 2400 96" preserveAspectRatio="none"><path d="' + d + '" fill="' + fill + '"/></svg>';
+    }
+    host.innerHTML =
+      wave(12, 600, 0, 40, "color-mix(in srgb, var(--glow) 14%, var(--bg))", "w1") +
+      wave(9, 400, 1.3, 62, "var(--bg2)", "w2");
+  })();
+
+  /* radar */
+  var radar = (function () {
+    var box = $("#radar"), cv = $("#radarCanvas"), ctx = cv.getContext("2d");
+    var brg = $("#brg"), col = {}, s = 0;
+    var defs = [
+      { t: "Marine electrical", a: 315 }, { t: "Power distribution", a: 45 },
+      { t: "Automation", a: 135 }, { t: "Renewables", a: 225 }
+    ];
+    var blips = defs.map(function (d) {
+      var el = document.createElement("div"); el.className = "blip";
+      var rad = d.a * Math.PI / 180, r = 37;
+      el.style.left = (50 + r * Math.sin(rad)) + "%";
+      el.style.top = (50 - r * Math.cos(rad)) + "%";
+      el.innerHTML = "<i></i><span>" + d.t + "</span>";
+      box.appendChild(el);
+      return { el: el, a: d.a };
+    });
+    function hexA(hex, a) {
+      var h = hex.replace("#", "");
+      if (h.length === 3) h = h.split("").map(function (c) { return c + c; }).join("");
+      return "rgba(" + parseInt(h.slice(0, 2), 16) + "," + parseInt(h.slice(2, 4), 16) + "," + parseInt(h.slice(4, 6), 16) + "," + a + ")";
+    }
+    function readColors() {
+      var cs = getComputedStyle(root);
+      col.glow = cs.getPropertyValue("--glow").trim() || "#4FE3D0";
+      col.muted = cs.getPropertyValue("--muted").trim() || "#8AA3B0";
+    }
+    function resize() {
+      var w = box.getBoundingClientRect().width, dpr = Math.min(window.devicePixelRatio || 1, 2);
+      s = Math.round(w * dpr); cv.width = s; cv.height = s;
+    }
+    var PI = Math.PI;
+    function draw(sw) {
+      var c = s / 2, R = c * 0.96, i;
+      ctx.clearRect(0, 0, s, s);
+      ctx.lineWidth = Math.max(1, s / 520);
+      [0.3, 0.52, 0.74, 0.96].forEach(function (k, n) {
+        ctx.beginPath(); ctx.arc(c, c, R * k, 0, PI * 2);
+        ctx.strokeStyle = hexA(col.glow, n === 3 ? 0.5 : 0.18); ctx.stroke();
+      });
+      ctx.strokeStyle = hexA(col.glow, 0.14);
+      ctx.beginPath(); ctx.moveTo(c - R, c); ctx.lineTo(c + R, c); ctx.moveTo(c, c - R); ctx.lineTo(c, c + R); ctx.stroke();
+      for (var a = 0; a < 360; a += 5) {
+        var rd = (a - 90) * PI / 180, len = a % 30 === 0 ? R * 0.07 : R * 0.035;
+        ctx.beginPath();
+        ctx.moveTo(c + Math.cos(rd) * R, c + Math.sin(rd) * R);
+        ctx.lineTo(c + Math.cos(rd) * (R - len), c + Math.sin(rd) * (R - len));
+        ctx.strokeStyle = hexA(col.glow, a % 30 === 0 ? 0.7 : 0.35); ctx.stroke();
+      }
+      ctx.fillStyle = hexA(col.glow, 0.9);
+      ctx.font = "500 " + Math.round(s / 42) + "px 'JetBrains Mono', monospace";
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      [["N", 0], ["E", 90], ["S", 180], ["W", 270]].forEach(function (p) {
+        var rd = (p[1] - 90) * PI / 180, rr = R * 0.84;
+        ctx.fillText(p[0], c + Math.cos(rd) * rr, c + Math.sin(rd) * rr);
+      });
+      var steps = 56, span = 75;
+      for (i = 0; i < steps; i++) {
+        var a1 = sw - i * (span / steps), a0 = a1 - span / steps;
+        ctx.beginPath(); ctx.moveTo(c, c);
+        ctx.arc(c, c, R, (a0 - 90) * PI / 180, (a1 - 90) * PI / 180 + 0.004); ctx.closePath();
+        ctx.fillStyle = hexA(col.glow, 0.34 * Math.pow(1 - i / steps, 1.7)); ctx.fill();
+      }
+      var lr = (sw - 90) * PI / 180;
+      ctx.beginPath(); ctx.moveTo(c, c); ctx.lineTo(c + Math.cos(lr) * R, c + Math.sin(lr) * R);
+      ctx.strokeStyle = hexA(col.glow, 0.95); ctx.lineWidth = Math.max(1.5, s / 300); ctx.stroke();
+    }
+    function blipsAt(sw) {
+      blips.forEach(function (b) {
+        var d = (sw - b.a + 360) % 360, lit = d < 110 ? 1 - d / 110 : 0;
+        b.el.style.setProperty("--lit", lit.toFixed(2));
+      });
+      brg.textContent = ("00" + Math.round(sw)).slice(-3);
+    }
+    var sweep = 40, last = 0, raf = 0, vis = true;
+    function frame(t) {
+      if (!vis || document.hidden) { raf = 0; return; }
+      var dt = Math.min((t - last) / 1000, 0.1); last = t;
+      sweep = (sweep + dt * 55) % 360;
+      draw(sweep); blipsAt(sweep);
+      raf = requestAnimationFrame(frame);
+    }
+    function start() { if (!raf && !RM) { last = performance.now(); raf = requestAnimationFrame(frame); } }
+    readColors(); resize();
+    var api = {
+      readColors: readColors,
+      drawNow: function () { draw(sweep); blipsAt(sweep); }
+    };
+    api.drawNow();
+    if (RM) { blips.forEach(function (b) { b.el.style.setProperty("--lit", "0.7"); }); }
+    window.addEventListener("resize", function () { resize(); api.drawNow(); });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) { vis = es[0].isIntersecting; if (vis) start(); }).observe(box);
+    }
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) start(); });
+    start();
+    return api;
+  })();
+  applyTheme(saved === "light" ? "light" : "dark");
+
+  /* project visuals */
+  (function () {
+    var NS = "http://www.w3.org/2000/svg";
+    function svg(id, inner) { $(id).insertAdjacentHTML("afterbegin", inner); }
+    // motor vibration: sine with a slow wobble in amplitude
+    var d = "M0 65";
+    for (var x = 0; x <= 600; x += 4) {
+      var amp = 22 + 8 * Math.sin(x / 300 * 6.2832);
+      d += "L" + x + " " + (65 + amp * Math.sin(x / 100 * 6.2832) + 3 * Math.sin(x / 100 * 6.2832 * 7)).toFixed(1);
+    }
+    svg("#viz-motor", '<svg viewBox="0 0 300 130" preserveAspectRatio="none"><line x1="0" y1="65" x2="300" y2="65" stroke="var(--line)"/><g><g style="animation:vz 6s linear infinite"><path d="' + d + '" fill="none" stroke="var(--glow)" stroke-width="2"/></g></g><style>@keyframes vz{to{transform:translateX(-300px)}}</style></svg>');
+    // PWM: pulses whose width drifts
+    var p = "M0 100", xx = 0, i = 0;
+    while (xx < 700) {
+      var duty = 0.5 + 0.22 * Math.sin(i * Math.PI / 3), per = 50, on = per * duty;
+      p += "L" + xx + " 40L" + (xx + on) + " 40L" + (xx + on) + " 100L" + (xx + per) + " 100";
+      xx += per; i++;
+    }
+    svg("#viz-pwm", '<svg viewBox="0 0 300 130" preserveAspectRatio="none"><g><g style="animation:vp 5s linear infinite"><path d="' + p + '" fill="none" stroke="var(--accent)" stroke-width="2"/></g></g><style>@keyframes vp{to{transform:translateX(-300px)}}</style></svg>');
+    // voice bars
+    var bars = "";
+    for (var b = 0; b < 32; b++) {
+      bars += '<rect x="' + (10 + b * 9) + '" y="45" width="5" height="40" rx="1" fill="var(--glow)" style="transform-box:fill-box;transform-origin:center;animation:vb ' + (0.8 + (b * 37 % 9) / 10) + 's ease-in-out ' + (-(b * 53 % 10) / 10) + 's infinite alternate"/>';
+    }
+    svg("#viz-voice", '<svg viewBox="0 0 300 130" preserveAspectRatio="none">' + bars + '<style>@keyframes vb{from{transform:scaleY(.15)}to{transform:scaleY(1.9)}}</style></svg>');
+  })();
+
+  /* switchboard simulator */
+  (function () {
+    var st = { g1: true, g2: true, em: false, emAuto: false };
+    var timer = 0;
+    var el = function (id) { return document.getElementById(id); };
+    var mainFeeds = [["f-prop", "Propulsion"], ["f-pump", "Pumps and fans"], ["f-acc", "Accommodation"]];
+    var esFeeds = [["f-steer", "Steering gear"], ["f-light", "Emergency lighting"]];
+    var list = el("loads");
+    function on(node, v) { node.classList.toggle("on", !!v); }
+    function render() {
+      var mainLive = st.g1 || st.g2;
+      var emRun = st.em || st.emAuto;
+      var esLive = mainLive || emRun;
+      on(el("g1"), st.g1); on(el("g2"), st.g2); on(el("em"), emRun);
+      el("g1").setAttribute("aria-checked", st.g1); el("g2").setAttribute("aria-checked", st.g2); el("em").setAttribute("aria-checked", emRun);
+      el("s-g1").textContent = st.g1 ? "ON" : "OFF";
+      el("s-g2").textContent = st.g2 ? "ON" : "OFF";
+      el("s-em").textContent = emRun ? "RUN" : (!mainLive ? "START" : "STBY");
+      on(el("busMain"), mainLive);
+      on(el("tie"), mainLive);
+      on(el("busEs"), esLive);
+      mainFeeds.forEach(function (f) { on(el(f[0]), mainLive); });
+      esFeeds.forEach(function (f) { on(el(f[0]), esLive); });
+      var n = (st.g1 ? 1 : 0) + (st.g2 ? 1 : 0), msg, warn = false;
+      if (n === 2) msg = "Main bus live · 2 generators online";
+      else if (n === 1) msg = "Main bus live · 1 generator online. Load sharing reduced.";
+      else if (emRun) { msg = "Blackout · emergency generator supplying essential services only"; warn = true; }
+      else { msg = "Blackout · main bus dead. Emergency generator starting…"; warn = true; }
+      var pill = el("busStatus"); pill.textContent = msg; pill.classList.toggle("warn", warn);
+      list.innerHTML = "";
+      mainFeeds.concat(esFeeds).forEach(function (f, i) {
+        var up = i < mainFeeds.length ? mainLive : esLive;
+        var li = document.createElement("li"); li.className = up ? "up" : "";
+        li.innerHTML = "<span>" + f[1] + "</span><b>" + (up ? "POWERED" : "NO POWER") + "</b>";
+        list.appendChild(li);
+      });
+      // emergency generator auto-start on blackout
+      if (!mainLive && !st.emAuto && !timer) {
+        timer = setTimeout(function () { timer = 0; if (!(st.g1 || st.g2)) { st.emAuto = true; render(); } }, 1600);
+      }
+      if (mainLive) { if (timer) { clearTimeout(timer); timer = 0; } if (st.emAuto) { st.emAuto = false; render(); } }
+    }
+    function toggle(k) {
+      if (k === "em") { st.em = !st.em; } else { st[k] = !st[k]; }
+      render();
+    }
+    ["g1", "g2", "em"].forEach(function (k) {
+      var g = el(k);
+      g.addEventListener("click", function () { toggle(k); });
+      g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(k); } });
+    });
+    el("simReset").addEventListener("click", function () {
+      if (timer) { clearTimeout(timer); timer = 0; }
+      st = { g1: true, g2: true, em: false, emAuto: false }; render();
+    });
+    render();
+  })();
+
+  onScroll();
+})();
+</script>
+</body>
+</html>
